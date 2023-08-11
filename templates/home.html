@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+
+<!-- Page title -->
+<div class="page-header d-print-none">
+    <div class="row align-items-center">
+        <div class="col">
+            <div class="page-pretitle">
+                Overview
+            </div>
+            <h2 class="page-title">
+                Nkanu East L.G.A
+            </h2>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="row row-deck row-cards">
+        <!-- Revenue Card -->
+        <div class="col-sm-6 col-lg-3">
+            <div class="card py-2 h-100">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="subheader">Year {% now "Y" %} Revenue</div>
+                            <div class="d-flex align-items-baseline">
+                                <div class="h1 mb-3 me-2 text-green">&#8358;{{ revenue_this_year|intcomma }}</div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-naira-sign  fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {% if revenue_change_type == "increase" %}
+                            <span class="text-green d-inline-flex align-items-center lh-1">
+                                {{ revenue_percentage_change|floatformat:2 }}% 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <polyline points="3 17 9 11 13 15 21 7" />
+                                    <polyline points="14 7 21 7 21 14" />
+                                </svg>
+                            </span>
+                            {% else %}
+                            <span class="text-red d-inline-flex align-items-center lh-1">
+                                {{ revenue_percentage_change|floatformat:2 }}%
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trending-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 7l6 6l4 -4l8 8"></path>
+                                    <path d="M21 10l0 7l-7 0"></path>
+                                </svg>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Transactions Card -->
+        <div class="col-sm-6 col-lg-3">
+            <div class="card py-2 h-100">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="subheader">Year {% now "Y" %} Transactions</div>
+                            <div class="d-flex align-items-baseline">
+                                <div class="h1 mb-3 me-2">{{ total_revenue_transactions_this_year|intcomma }}</div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-receipt  fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {% if transaction_change_type == "increase" %}
+                            <span class="text-green d-inline-flex align-items-center lh-1">
+                                {{ transaction_percentage_change|floatformat:2 }}% 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <polyline points="3 17 9 11 13 15 21 7" />
+                                    <polyline points="14 7 21 7 21 14" />
+                                </svg>
+                            </span>
+                            {% else %}
+                            <span class="text-red d-inline-flex align-items-center lh-1">
+                                {{ transaction_percentage_change|floatformat:2 }}%
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trending-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 7l6 6l4 -4l8 8"></path>
+                                    <path d="M21 10l0 7l-7 0"></path>
+                                </svg>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tax Payers Card -->
+        <div class="col-sm-6 col-lg-3">
+            <div class="card py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="subheader">Tax Payers</div>
+                            <div class="d-flex align-items-baseline">
+                                <div class="h1 mb-3 me-2">{{ total_taxpayers }}</div>
+                            </div>
+                            <span class="text-danger small"></span>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-user-plus fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small>Total Registered Tax Payers in Nkanu L.G.A</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="row row-cards">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-naira-sign"></i>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        Last Year Revenue
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ revenue_last_year|intcomma }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        Last Year Transactions
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ total_revenue_transactions_last_year }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                            <path d="M16 19h6"></path>
+                                            <path d="M19 16v6"></path>
+                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                                            </svg>
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <div class="font-weight-medium">
+                                        New Tax Payers
+                                    </div>
+                                    <div class="text-muted">
+                                        {{ total_taxpayers_registered_this_year }} this year
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Sources -->
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Revenue Sources</h3>
+                </div>
+                <div class="card-body" style="height: 500px;">
+                    <canvas id="transactions-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Revenue Transactions</h3>
+                </div>
+                <div class="card-body border-bottom py-3">
+                    <div class="d-flex">
+                        <div class="text-muted">
+                            Latest Revenue Transactions Recorded
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table card-table table-vcenter text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>T.I.N</th>
+                                <th>Tax Payer</th>
+                                <th>Revenue Type</th>
+                                <th>Amount</th>
+                                <th>Note</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in latest_transactions %}
+                            <tr>
+                                <td><span class="text-muted">{{ transaction.tax_payer.tin }}</span></td>
+                                <td><a href="{% url 'tax_payer_detail' transaction.tax_payer.id %}" class="text-reset" tabindex="-1">{{ transaction.tax_payer }}</a></td>
+                                <td>{{ transaction.revenue_source }}</td>
+                                <td>&#8358;{{ transaction.amount|intcomma }}</td>
+                                <td>{{ transaction.note|truncatechars:50 }}</td>
+                                <td>{{ transaction.created|date:"F, j Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
