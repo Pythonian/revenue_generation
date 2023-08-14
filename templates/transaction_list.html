@@ -43,8 +43,18 @@
     <div class="row my-3">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <h3 class="card-title">Revenue Transactions</h3>
+                    <div class="ms-auto text-muted">
+                        <div class="ms-2 d-inline-block">
+                            <form method="GET" action="{% url 'transaction_list' %}">
+                                <div class="input-group">
+                                    <input type="text" id="search" class="form-control form-control-sm" placeholder="Search..." name="q" value="{{ request.GET.q }}">
+                                    <button type="submit" class="btn btn-warning" title="Search"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table card-table table-vcenter text-nowrap">

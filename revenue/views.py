@@ -6,6 +6,7 @@ from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.db.models import Q
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from openpyxl.utils import get_column_letter
@@ -169,6 +170,16 @@ def home(request):
 
 def tax_payer_list(request):
     tax_payers = TaxPayer.objects.all()
+    search_query = request.GET.get('q')
+
+    if search_query:
+        tax_payers = tax_payers.filter(
+            Q(name__icontains=search_query) |   # Search by name
+            Q(tin__icontains=search_query) |    # Search by TIN
+            Q(email__icontains=search_query) |  # Search by email
+            Q(phone__icontains=search_query)    # Search by phone
+        )
+
     tax_payers = mk_paginator(request, tax_payers, 12)
 
     if request.method == "POST":
@@ -279,6 +290,15 @@ def tax_payer_delete(request):
 
 def transaction_list(request):
     transactions = RevenueTransaction.objects.all()
+    search_query = request.GET.get('q')
+
+    if search_query:
+        transactions = transactions.filter(
+            Q(tax_payer__name__icontains=search_query) |
+            Q(tax_payer__tin__icontains=search_query) |
+            Q(note__icontains=search_query) |
+            Q(revenue_source__name__icontains=search_query)
+        )
     transactions = mk_paginator(request, transactions, 50)
 
     if request.method == "POST":
