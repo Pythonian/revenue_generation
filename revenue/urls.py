@@ -10,5 +10,6 @@ urlpatterns = [
     path("transaction/delete/", views.transaction_delete, name="transaction_delete"),
     path("revenue-categories/", views.revenue_categories, name="revenue_categories"),
     path("revenue-sources/", views.revenue_sources, name="revenue_sources"),
-    path("", views.home, name="home"),
+    path("dashboard/", views.home, name="home"),
+    path("", views.index, name="index"),
 ]

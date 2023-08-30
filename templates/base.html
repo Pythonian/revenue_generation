@@ -28,18 +28,17 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                    <a href="{% url 'home' %}" class="text-decoration-none">
+                    <a href="/" class="text-decoration-none">
                         Revenue Dashboard
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
                     {% block navbar-action %}
                     <div class="nav-item dropdown">
-                        <a href="#" class="btn btn-primary" data-bs-toggle="dropdown"
-                            aria-label="Open menu">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                stroke-linejoin="round">
+                        <a href="#" class="btn btn-primary" data-bs-toggle="dropdown" aria-label="Open menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <line x1="12" y1="5" x2="12" y2="19" />
                                 <line x1="5" y1="12" x2="19" y2="12" />
@@ -55,6 +54,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+                        {% block navbar %}
                         <ul class="navbar-nav">
                             {% url 'home' as home_url %}
                             <li class="nav-item {% if request.path == home_url %}active{% endif %}">
@@ -79,13 +79,16 @@
                             <li class="nav-item {% if request.path == tax_payer_list_url %}active{% endif %}">
                                 <a class="nav-link" href="{{ tax_payer_list_url }}">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-users" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
                                             <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                             <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
-                                         </svg>
+                                        </svg>
                                     </span>
                                     <span class="nav-link-title">
                                         Tax Payers
@@ -96,13 +99,18 @@
                             <li class="nav-item {% if request.path == transaction_list_url %}active{% endif %}">
                                 <a class="nav-link" href="{{ transaction_list_url }}">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-receipt-tax" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-receipt-tax" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M9 14l6 -6"></path>
                                             <circle cx="9.5" cy="8.5" r=".5" fill="currentColor"></circle>
                                             <circle cx="14.5" cy="13.5" r=".5" fill="currentColor"></circle>
-                                            <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"></path>
-                                         </svg>
+                                            <path
+                                                d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2">
+                                            </path>
+                                        </svg>
                                     </span>
                                     <span class="nav-link-title">
                                         Revenue Transactions
@@ -110,6 +118,7 @@
                                 </a>
                             </li>
                         </ul>
+                        {% endblock navbar %}
                     </div>
                 </div>
             </div>
@@ -121,28 +130,34 @@
         </div>
         <footer class="footer footer-transparent d-print-none">
             <div class="container-xl">
-              <div class="row text-center align-items-center flex-row-reverse">
-                <div class="col-lg-auto ms-lg-auto">
-                  <ul class="list-inline list-inline-dots mb-0">
-                    <li class="list-inline-item">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-                        Final Year Project
-                    </li>
-                  </ul>
+                <div class="row text-center align-items-center flex-row-reverse">
+                    <div class="col-lg-auto ms-lg-auto">
+                        <ul class="list-inline list-inline-dots mb-0">
+                            <li class="list-inline-item">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline"
+                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                                </svg>
+                                Final Year Project
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                        <ul class="list-inline list-inline-dots mb-0">
+                            <li class="list-inline-item">
+                                Copyright &copy; {% now "Y" %}
+                                <a href="." class="link-secondary">Nkanu L.G.A</a>.
+                                All rights reserved.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-                  <ul class="list-inline list-inline-dots mb-0">
-                    <li class="list-inline-item">
-                      Copyright &copy; {% now "Y" %}
-                      <a href="." class="link-secondary">Nkanu L.G.A</a>.
-                      All rights reserved.
-                    </li>
-                  </ul>
-                </div>
-              </div>
             </div>
-          </footer>
+        </footer>
     </div>
 
     <script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
@@ -154,37 +169,37 @@
             var revenueSources = [
                 {% for source in revenue_sources_with_transaction_count %}
                     "{{ source.name }}",
-                {% endfor %}
+            {% endfor %}
             ];
 
-            var transactionCounts = [
-                {% for source in revenue_sources_with_transaction_count %}
-                    {{ source.transaction_count }},
-                {% endfor %}
+        var transactionCounts = [
+            {% for source in revenue_sources_with_transaction_count %}
+        { { source.transaction_count } },
+        {% endfor %}
             ];
 
-            new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: revenueSources,
-                    datasets: [{
-                        label: "Transactions",
-                        data: transactionCounts,
-                        backgroundColor: "#206bc4",
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            stepSize: 10, // Set step size for y-axis
-                        },
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: revenueSources,
+                datasets: [{
+                    label: "Transactions",
+                    data: transactionCounts,
+                    backgroundColor: "#206bc4",
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 10, // Set step size for y-axis
                     },
                 },
-            });
+            },
+        });
         });
     </script>
     {% block script %}{% endblock %}

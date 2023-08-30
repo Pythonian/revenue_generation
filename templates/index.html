@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Home Page{% endblock title %}
+
+{% block navbar-action %}
+<div class="nav-item">
+    <a href="/dashboard/" class="btn btn-primary">
+
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <polyline points="5 12 3 12 12 3 21 12 19 12" />
+            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+            <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+        </svg>
+
+        View Dashboard
+    </a>
+</div>
+{% endblock navbar-action %}
+
+{% block navbar %}{% endblock navbar %}
+
+{% block content %}
+
+<div class="page 1page-center">
+    <div class="container-narrow py-4">
+        <div class="card card-md">
+            <div class="card-body text-center py-4 p-sm-5">
+                <h1 class="mt-3">Welcome to Nkanu East L.G.A Revenue Dashboard</h1>
+                <p class="text-muted">Empowering Efficiency, Transparency, and Accountability</p>
+            </div>
+            <div class="hr-text hr-text-center hr-text-spaceless">Key Features</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Centralized Database:</label>
+                    <div class="form-hint mb-3">The system maintains a centralized database, where every
+                        transaction, payment, and record is stored. This guarantees quick and easy access to information
+                        whenever it is needed.</div>
+                    <label class="form-label">Effortless Record Retrieval:</label>
+                    <div class="form-hint mb-3">Searching for specific records of a tax payer or a transaction is now a
+                        breeze. With just the right query, relevant information can be gotten, eliminating the
+                        hassle of manual record-keeping.</div>
+                    <label class="form-label">Graphs and Reports:</label>
+                    <div class="form-hint">Graph reports are generated and can be downloaded for auditing. This promotes
+                        transparency and enables informed decision-making by
+                        providing a clear overview of the financial health of the L.G.A.</div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                Built by:
+                <span class="text-primary">Aniefuna Somtochukwu Kingsley</span><br>
+                <span class="text-danger">2019/249842</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

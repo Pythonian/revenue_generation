@@ -18,6 +18,9 @@ from .models import (RevenueCategory, RevenueSource, RevenueTransaction,
 from .utils import mk_paginator
 
 
+def index(request):
+    return render(request, 'index.html')
+
 def home(request):
     current_year = datetime.today().year
     current_month = datetime.today().month
