@@ -11,15 +11,19 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 from openpyxl.utils import get_column_letter
 
-from .forms import (RevenueCategoryForm, RevenueSourceForm,
-                    RevenueTransactionForm, TaxPayerForm)
-from .models import (RevenueCategory, RevenueSource, RevenueTransaction,
-                     TaxPayer)
+from .forms import (
+    RevenueCategoryForm,
+    RevenueSourceForm,
+    RevenueTransactionForm,
+    TaxPayerForm,
+)
+from .models import RevenueCategory, RevenueSource, RevenueTransaction, TaxPayer
 from .utils import mk_paginator
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, "index.html")
+
 
 def home(request):
     current_year = datetime.today().year
@@ -29,19 +33,17 @@ def home(request):
     # Initialize with zeros for all months
     revenue_data = [0] * 12
 
-    transactions = RevenueTransaction.objects.filter(
-        created__year=current_year)
-    latest_transactions = RevenueTransaction.objects.filter(
-        created__year=current_year)[:5]
+    transactions = RevenueTransaction.objects.filter(created__year=current_year)
+    latest_transactions = RevenueTransaction.objects.filter(created__year=current_year)[
+        :5
+    ]
     for transaction in transactions:
         revenue_data[transaction.created.month - 1] += transaction.amount
 
     # Calculate total revenue for the current year
-    current_year = datetime.today().year
     total_revenue_this_year = (
-        RevenueTransaction.objects.filter(
-            created__year=current_year).aggregate(
-                total=Sum("amount")
+        RevenueTransaction.objects.filter(created__year=current_year).aggregate(
+            total=Sum("amount")
         )["total"]
         or 0
     )
@@ -59,11 +61,14 @@ def home(request):
     # Count total number of registered Tax Payers in the database
     total_taxpayers = TaxPayer.objects.all().count()
     total_taxpayers_registered_this_year = TaxPayer.objects.filter(
-        created__year=current_year).count()
+        created__year=current_year
+    ).count()
 
     # Calculate average revenue per transaction in the current year
     average_revenue_per_transaction = (
-        total_revenue_this_year / total_revenue_transactions_this_year if total_revenue_transactions_this_year > 0 else 0
+        total_revenue_this_year / total_revenue_transactions_this_year
+        if total_revenue_transactions_this_year > 0
+        else 0
     )
 
     total_revenue_prev_month = (
@@ -90,24 +95,26 @@ def home(request):
         )
 
     # Calculate revenue from last year
-    last_year = datetime.today().year - 1
-    revenue_last_year = RevenueTransaction.objects.filter(
-            created__year=last_year
-        ).aggregate(
+    revenue_last_year = (
+        RevenueTransaction.objects.filter(created__year=last_year).aggregate(
             total_revenue=Sum("amount")
-        )["total_revenue"] or 0
+        )["total_revenue"]
+        or 0
+    )
 
     # Calculate revenue for this year
-    current_year = datetime.today().year
-    revenue_this_year = RevenueTransaction.objects.filter(
-            created__year=current_year
-        ).aggregate(
+    revenue_this_year = (
+        RevenueTransaction.objects.filter(created__year=current_year).aggregate(
             total_revenue=Sum("amount")
-        )["total_revenue"] or 0
+        )["total_revenue"]
+        or 0
+    )
 
     # Calculate the percentage increase or decrease in revenue
     if revenue_last_year == 0:
-        revenue_percentage_change = 100  # Handle the case when last year's revenue is zero
+        revenue_percentage_change = (
+            100  # Handle the case when last year's revenue is zero
+        )
     else:
         revenue_percentage_change = (
             (revenue_this_year - revenue_last_year) / revenue_last_year
@@ -122,17 +129,24 @@ def home(request):
         transaction_percentage_change = 100
     else:
         transaction_percentage_change = (
-            (total_revenue_transactions_this_year - total_revenue_transactions_last_year) / 
-            total_revenue_transactions_last_year
+            (
+                total_revenue_transactions_this_year
+                - total_revenue_transactions_last_year
+            )
+            / total_revenue_transactions_last_year
         ) * 100
 
     # Determine whether it's an increase or decrease in transaction
-    transaction_change_type = "increase" if transaction_percentage_change > 0 else "decrease"
+    transaction_change_type = (
+        "increase" if transaction_percentage_change > 0 else "decrease"
+    )
     transaction_percentage_change = abs(transaction_percentage_change)
 
     # Remove months with zero revenue
     non_zero_revenue_data = [
-        (month, revenue) for month, revenue in enumerate(revenue_data, start=1) if revenue > 0
+        (month, revenue)
+        for month, revenue in enumerate(revenue_data, start=1)
+        if revenue > 0
     ]
 
     # Calculate total number of transactions for each revenue source
@@ -156,7 +170,6 @@ def home(request):
         "non_zero_revenue_data": non_zero_revenue_data,
         "total_revenue_transactions_last_year": total_revenue_transactions_last_year,
         "transaction_change_type": transaction_change_type,
-        "total_revenue_transactions_last_year": total_revenue_transactions_last_year,
         "transaction_percentage_change": transaction_percentage_change,
         "total_taxpayers_registered_this_year": total_taxpayers_registered_this_year,
         "revenue_sources_with_transaction_count": revenue_sources_with_transaction_count,
@@ -171,16 +184,17 @@ def home(request):
 #
 ###########################################################
 
+
 def tax_payer_list(request):
     tax_payers = TaxPayer.objects.all()
-    search_query = request.GET.get('q')
+    search_query = request.GET.get("q")
 
     if search_query:
         tax_payers = tax_payers.filter(
-            Q(name__icontains=search_query) |   # Search by name
-            Q(tin__icontains=search_query) |    # Search by TIN
-            Q(email__icontains=search_query) |  # Search by email
-            Q(phone__icontains=search_query)    # Search by phone
+            Q(name__icontains=search_query)
+            | Q(tin__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(phone__icontains=search_query)
         )
 
     tax_payers = mk_paginator(request, tax_payers, 12)
@@ -192,7 +206,8 @@ def tax_payer_list(request):
             tax_payer.created = timezone.now()
             tax_payer.save()
             messages.success(
-                request, f"{tax_payer.name} has been successfully created.")
+                request, f"{tax_payer.name} has been successfully created."
+            )
             return redirect("tax_payer_detail", tax_payer.id)
     else:
         form = TaxPayerForm()
@@ -221,10 +236,9 @@ def tax_payer_list(request):
         wb.save(response)
         return response
 
-    return render(request,
-                  "tax_payer_list.html",
-                  {"tax_payers": tax_payers,
-                   "form": form})
+    return render(
+        request, "tax_payer_list.html", {"tax_payers": tax_payers, "form": form}
+    )
 
 
 def tax_payer_detail(request, id):
@@ -237,7 +251,8 @@ def tax_payer_detail(request, id):
         if form.is_valid():
             form.save()
             messages.success(
-                request, f"{tax_payer.name} has been successfully updated.")
+                request, f"{tax_payer.name} has been successfully updated."
+            )
             return redirect("tax_payer_detail", tax_payer.id)
     else:
         form = TaxPayerForm(instance=tax_payer)
@@ -245,7 +260,9 @@ def tax_payer_detail(request, id):
     # Excel file generation and download
     if request.GET.get("download_excel"):
         response = HttpResponse(content_type="application/ms-excel")
-        response["Content-Disposition"] = f"attachment; filename={tax_payer.name}_transactions.xlsx"
+        response[
+            "Content-Disposition"
+        ] = f"attachment; filename={tax_payer.name}_transactions.xlsx"
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Transactions"
@@ -268,11 +285,11 @@ def tax_payer_detail(request, id):
         wb.save(response)
         return response
 
-    return render(request,
-                  "tax_payer_detail.html",
-                  {"tax_payer": tax_payer,
-                   "transactions": transactions,
-                   "form": form})
+    return render(
+        request,
+        "tax_payer_detail.html",
+        {"tax_payer": tax_payer, "transactions": transactions, "form": form},
+    )
 
 
 @require_POST
@@ -291,16 +308,17 @@ def tax_payer_delete(request):
 #
 ###########################################################
 
+
 def transaction_list(request):
     transactions = RevenueTransaction.objects.all()
-    search_query = request.GET.get('q')
+    search_query = request.GET.get("q")
 
     if search_query:
         transactions = transactions.filter(
-            Q(tax_payer__name__icontains=search_query) |
-            Q(tax_payer__tin__icontains=search_query) |
-            Q(note__icontains=search_query) |
-            Q(revenue_source__name__icontains=search_query)
+            Q(tax_payer__name__icontains=search_query)
+            | Q(tax_payer__tin__icontains=search_query)
+            | Q(note__icontains=search_query)
+            | Q(revenue_source__name__icontains=search_query)
         )
     transactions = mk_paginator(request, transactions, 50)
 
@@ -311,7 +329,8 @@ def transaction_list(request):
             transaction.created = timezone.now()
             transaction.save()
             messages.success(
-                request, "Revenue Transaction has been successfully created.")
+                request, "Revenue Transaction has been successfully created."
+            )
             return redirect("transaction_list")
     else:
         form = RevenueTransactionForm()
@@ -319,16 +338,23 @@ def transaction_list(request):
     # Excel file generation and download
     if request.GET.get("download_excel"):
         response = HttpResponse(content_type="application/ms-excel")
-        response["Content-Disposition"] = "attachment; filename=RevenueTransactions.xlsx"
+        response[
+            "Content-Disposition"
+        ] = "attachment; filename=RevenueTransactions.xlsx"
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Revenue Transactions"
 
         # Add header row
         header = [
-            "Transaction ID", "Tax Payer",
-            "Tax Identification Number", "Revenue Type",
-            "Amount", "Note", "Created"]
+            "Transaction ID",
+            "Tax Payer",
+            "Tax Identification Number",
+            "Revenue Type",
+            "Amount",
+            "Note",
+            "Created",
+        ]
         for col_num, header_text in enumerate(header, 1):
             col_letter = get_column_letter(col_num)
             ws[f"{col_letter}1"] = header_text
@@ -347,10 +373,9 @@ def transaction_list(request):
         wb.save(response)
         return response
 
-    return render(request,
-                  "transaction_list.html",
-                  {"transactions": transactions,
-                   "form": form})
+    return render(
+        request, "transaction_list.html", {"transactions": transactions, "form": form}
+    )
 
 
 @require_POST
@@ -366,7 +391,7 @@ def transaction_delete(request):
 def revenue_categories(request):
     categories = RevenueCategory.objects.all()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = RevenueCategoryForm(request.POST)
         if form.is_valid():
             form.save()
@@ -378,16 +403,14 @@ def revenue_categories(request):
         form = RevenueCategoryForm()
 
     return render(
-        request,
-        "revenue_categories.html",
-        {"categories": categories,
-          "form": form})
+        request, "revenue_categories.html", {"categories": categories, "form": form}
+    )
 
 
 def revenue_sources(request):
     sources = RevenueSource.objects.all()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = RevenueSourceForm(request.POST)
         if form.is_valid():
             form.save()
@@ -398,6 +421,4 @@ def revenue_sources(request):
     else:
         form = RevenueSourceForm()
 
-    return render(
-        request,
-        "revenue_sources.html", {"sources": sources, "form": form})
+    return render(request, "revenue_sources.html", {"sources": sources, "form": form})
